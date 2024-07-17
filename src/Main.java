@@ -1,4 +1,6 @@
 package ru.practicum.dinner;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -47,50 +49,44 @@ public class Main {
         String dishType = scanner.nextLine();
         System.out.println("Введите название блюда:");
         String dishName = scanner.nextLine();
-        if (dinnerConstructor.nameOfDishArray.contains(dishName)) {
+
+        boolean select = true;
+        for (ArrayList<String> src : dinnerConstructor.dinnerMenuMap.values()) {
+            if (src.contains(dishName)) {
+                select = false;
+            }
+        }
+        if (!select) {
             System.out.println("это блюдо уже есть в списке");
         } else {
             dinnerConstructor.saveNameMenu(dishType, dishName);
         }
-
-
-
     }
 
     private static void generateDishCombo() {
 
         if (!dinnerConstructor.dinnerMenuMap.isEmpty()) {
+            ArrayList<String> keyMenuArray = new ArrayList<>();
             System.out.println("Начинаем конструировать обед...");
             System.out.println("Введите количество наборов, которые нужно сгенерировать: 1,2,3,4,5");
             int numberOfCombos = scanner.nextInt();
             scanner.nextLine();
             System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). " +
                     "Для завершения ввода введите пустую строку");
-            System.out.println("В меню добавленны: " + dinnerConstructor.keyMenuArray);
+
             String nextItem = scanner.nextLine();
 
             if (dinnerConstructor.dinnerMenuMap.containsKey(nextItem)) {
                 while (!nextItem.isEmpty()) {
-                    if (dinnerConstructor.keyMenuArray.contains(nextItem)) {
-                        System.out.println("Этот тип блюда уже добавлен в обед");
-                        break;
-
-                    } else {
-                        dinnerConstructor.keyMenuArray.add(nextItem);
-                        nextItem = scanner.nextLine();
-
-                    }
+                    keyMenuArray.add(nextItem);
+                    nextItem = scanner.nextLine();
                 }
-                        dinnerConstructor.mixComboMenu(numberOfCombos);
+                dinnerConstructor.mixComboMenu(numberOfCombos, keyMenuArray);
+
 
             } else {
-                System.out.println("Такого типа блюд нет");
+                System.out.println("Такого блюда нет или еще не добавленно ");
             }
-
-
-        } else {
-            System.out.println("Сначала добавьте блюдо ");
         }
-
     }
 }
